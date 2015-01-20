@@ -31,7 +31,6 @@
 #import "ObjectALMacros.h"
 #import "ARCSafe_MemMgmt.h"
 #import "OALNotifications.h"
-#import "CCFileUtils.h"
 #import <AudioToolbox/AudioToolbox.h>
 
 
@@ -66,13 +65,16 @@ static NSBundle* g_defaultBundle;
 	{
 		return nil;
 	}
-	
-    NSString* fullPath = [[CCFileUtils sharedFileUtils] fullPathForFilenameIgnoringResolutions:path];
-    if(nil == fullPath)
-    {
-        OAL_LOG_ERROR(@"Could not find full path of file %@", path);
-        return nil;
-    }
+	NSString* fullPath = path;
+	if([fullPath characterAtIndex:0] != '/')
+	{
+		fullPath = [bundle pathForResource:path ofType:nil];
+		if(nil == fullPath)
+		{
+			OAL_LOG_ERROR(@"Could not find full path of file %@", path);
+			return nil;
+		}
+	}
 	
 	return [NSURL fileURLWithPath:fullPath];
 }

@@ -151,11 +151,17 @@
 			manualSuspendLock = value;
 			if(!interruptLock)
 			{
-				if(nil != suspendStatusChangeTarget)
-				{
-					typedef void (*Func)(id, SEL, bool);
-					((Func)objc_msgSend)(suspendStatusChangeTarget, suspendStatusChangeSelector, manualSuspendLock);
-				}
+                // Assign weak member var to a local var to prevent deallocation within this block
+                id localSuspendStatusChangeTarget = suspendStatusChangeTarget;
+                if(nil != localSuspendStatusChangeTarget)
+                {
+                    if([localSuspendStatusChangeTarget respondsToSelector:suspendStatusChangeSelector])
+                    {
+                        id (*suspendStatusChange)(id, SEL, bool);
+                        suspendStatusChange = (id (*)(id, SEL, bool))[localSuspendStatusChangeTarget methodForSelector:suspendStatusChangeSelector];
+                        suspendStatusChange(localSuspendStatusChangeTarget, suspendStatusChangeSelector, manualSuspendLock);
+                    }
+                }
 			}
 		}
 		
@@ -217,11 +223,18 @@
 			interruptLock = value;
 			if(!manualSuspendLock)
 			{
-				if(nil != suspendStatusChangeTarget)
-				{
-					typedef void (*Func)(id, SEL, bool);
-					((Func)objc_msgSend)(suspendStatusChangeTarget, suspendStatusChangeSelector, interruptLock);
-				}
+                // Assign weak member variable to a local var to prevent deallocation within this block
+                id localSuspendStatusChangeTarget = suspendStatusChangeTarget;
+
+                if(nil != localSuspendStatusChangeTarget)
+                {
+                    if([localSuspendStatusChangeTarget respondsToSelector:suspendStatusChangeSelector])
+                    {
+                        id (*suspendStatusChange)(id, SEL, bool);
+                        suspendStatusChange = (id (*)(id, SEL, bool))[localSuspendStatusChangeTarget methodForSelector:suspendStatusChangeSelector];
+                        suspendStatusChange(localSuspendStatusChangeTarget, suspendStatusChangeSelector, interruptLock);
+                    }
+                }
 			}
 		}
 		
