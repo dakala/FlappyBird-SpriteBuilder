@@ -15,7 +15,7 @@ typedef NS_ENUM(NSInteger, DrawingOrder) {
     DrawingOrderHero
 };
 
-@interface GamePlayScene : CCNode <CCPhysicsCollisionDelegate>
+@interface GamePlayScene : CCNode
 {
     // define variables here;
     Character* character;

@@ -22,10 +22,6 @@
     // Increment the time since the last obstacle was added
     timeSinceObstacle += delta; // delta is approximately 1/60th of a second
     
-    
-    NSLog(@"DELTA: %f", delta);
-    NSLog(@"TSO: %f", timeSinceObstacle);
-    
     // Check to see if two seconds have passed
     if (timeSinceObstacle < 2.0f)
     {
