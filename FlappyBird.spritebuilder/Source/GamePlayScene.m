@@ -6,6 +6,8 @@
 
 - (void)initialize
 {
+    NSLog(@"initialize() called:");
+
     // your code here
     character = (Character*)[CCBReader load:@"Character"];
     [physicsNode addChild:character];
@@ -15,6 +17,7 @@
 
 -(void)update:(CCTime)delta
 {
+    NSLog(@"update() called:");
     // put update code here
     // Increment the time since the last obstacle was added
     timeSinceObstacle += delta; // delta is approximately 1/60th of a second
@@ -24,6 +27,8 @@
     {
         // Add a new obstacle
         [self addObstacle];
+        
+        NSLog(@"addObstacle called:");
         
         // Then reset the timer.
         timeSinceObstacle = 0.0f;
